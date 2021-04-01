@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-   
+   <p>Settings Pages</p>
   </q-page>
 </template>
 
