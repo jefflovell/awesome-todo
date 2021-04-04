@@ -47,12 +47,16 @@ const state = {
 
 const mutations = {
 //syncronous methods
-
+    updateTask( state, payload){
+        Object.assign(state.tasks[payload.id], payload.updates)
+    }
 }
 
 const actions = {
 //asynchronous methods
-
+    updateTask({ commit }, payload) {
+        commit( 'updateTask', payload)
+    }
 }
 
 const getters = {
