@@ -41,10 +41,12 @@
     </q-item-section>
     <q-item-section side>
         <q-btn
+            @click.stop="promptToDelete(id)"
             flat
             round
-            color="primary"
-            icon="card_giftcard" />
+            dense
+            color="red"
+            icon="delete" />
     </q-item-section>
 
     </q-item>
@@ -57,7 +59,17 @@
     export default {
         props: ['task', 'id'],
         methods: {
-            ...mapActions('tasks', ['updateTask'])
+            ...mapActions('tasks', ['updateTask', 'deleteTask']),
+            promptToDelete(id){
+                this.$q.dialog({
+                title: 'Confirm',
+                message: 'Really delete?',
+                cancel: true,
+                persistent: true
+                }).onOk(() => {
+                    this.deleteTask(id)
+                })
+            }
         }
     }
 </script>
