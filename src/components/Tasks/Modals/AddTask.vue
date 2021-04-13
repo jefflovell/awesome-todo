@@ -14,6 +14,7 @@
       <q-form
         @submit="onSubmit"
         @reset="onReset"
+        ref="newTask"
         :autofocus="true">
         <q-card-section class="q-pt-none">
           <div class="row q-mb-sm">
@@ -24,7 +25,15 @@
               lazy-rules
               ref="name"
               class="col"
-              :rules="[val => !!val || 'Please type something']" />
+              :rules="[val => !!val || 'Please type something']" >
+                <template v-slot:append>
+                  <q-icon
+                    v-if="taskToSubmit.name"
+                    name="close"
+                    @click="taskToSubmit.name=''"
+                    class="cursor-pointer" />
+                </template>
+            </q-input>
           </div>
 
           <div class="row q-mb-sm">
@@ -35,7 +44,15 @@
               lazy-rules
               ref="dueDate" >
               <template v-slot:append>
-                <q-icon name="event" class="cursor-pointer">
+                <q-icon
+                  v-if="taskToSubmit.dueDate"
+                  name="close"
+                  @click="clearDueDate"
+                  class="cursor-pointer" />
+                <q-icon
+                  v-else
+                  name="event"
+                  class="cursor-pointer" >
                   <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
                     <q-date v-model="taskToSubmit.dueDate">
                       <div class="row items-center justify-end">
@@ -48,7 +65,9 @@
             </q-input>
           </div>
 
-          <div class="row q-mb-sm">
+          <div
+            v-if="taskToSubmit.dueDate"
+            class="row q-mb-sm">
             <q-input
               outlined
               v-model="taskToSubmit.dueTime"
@@ -56,7 +75,15 @@
               lazy-rules
               ref="dueTime" >
               <template v-slot:append>
-                <q-icon name="access_time" class="cursor-pointer">
+                <q-icon
+                  v-if="taskToSubmit.dueTime"
+                  name="close"
+                  @click="taskToSubmit.dueTime=''"
+                  class="cursor-pointer" />
+                <q-icon
+                  v-else
+                  name="access_time"
+                  class="cursor-pointer">
                   <q-popup-proxy transition-show="scale" transition-hide="scale">
                     <q-time v-model="taskToSubmit.dueTime">
                       <div class="row items-center justify-end">
@@ -67,14 +94,6 @@
                 </q-icon>
               </template>
             </q-input>
-          </div>
-          <div class="row justify-end">
-            <q-checkbox
-              v-model="addMultiple"
-              @click="addMultiple = !addMultiple"
-              align="right"
-              label="Add multiple tasks?"
-              left-label />
           </div>
         </q-card-section>
       
@@ -94,8 +113,7 @@
             label="Save"
             type="submit"
             color="primary"
-            flat
-            v-close-popup="!addMultiple" />
+            flat />
           </div>
         </q-card-actions>
         
@@ -104,10 +122,11 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex'
+
   export default {
     data() {
       return {
-        addMultiple: false,
         taskToSubmit: {
           name: '',
           dueDate: '',
@@ -117,6 +136,7 @@
       }
     },
     methods: {
+      ...mapActions('tasks', ['addTask']),
       onSubmit() {
         this.$refs.name.validate()
         if ( !this.$refs.name.hasError ) {
@@ -131,16 +151,18 @@
       },
       submitTask() {
         console.log('submitTask')
-        this.onReset()
+        this.addTask(this.taskToSubmit)
+        this.$emit('close')
       },
       onReset() {
-        this.taskToSubmit.name = ''
-        this.taskToSubmit.dueDate = ''
-        this.taskToSubmit.dueTime = ''
+        this.taskToSubmit.name=null
+        this.taskToSubmit.dueDate=null
+        this.taskToSubmit.dueTime=null
 
-        this.$refs.name.resetValidation()
-        this.$refs.dueDate.resetValidation()
-        this.$refs.dueTime.resetValidation()
+      },
+      clearDueDate() {
+        this.taskToSubmit.dueDate=''
+        this.taskToSubmit.dueTime=''
       }
       
     }
