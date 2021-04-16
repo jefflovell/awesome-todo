@@ -10,7 +10,8 @@
         :autofocus="true">
         <q-card-section class="q-pt-none">
           <modal-task-name
-            :name.sync="taskToSubmit.name" />
+            :name.sync="taskToSubmit.name" 
+            ref="modalTaskName" />
           <modal-due-date
             :dueDate.sync="taskToSubmit.dueDate" 
             @clear="clearDueDate" />
@@ -19,26 +20,9 @@
             v-if="taskToSubmit.dueDate" />
         </q-card-section>
       
-        <q-card-actions align="right">
-          <div>
-            <q-btn
-            label="Cancel"
-            v-close-popup
-            color="grey-7"
-            flat />
-          <q-btn
-            label="Reset"
-            type="reset"
-            color="grey-7"
-            flat />
-          <q-btn
-            label="Save"
-            type="submit"
-            color="primary"
-            flat />
-          </div>
-        </q-card-actions>
-        <pre>{{taskToSubmit}}</pre>
+        <modal-buttons />
+
+        
       </q-form>
     </q-card>
 </template>
@@ -60,8 +44,8 @@
     methods: {
       ...mapActions('tasks', ['addTask']),
       onSubmit() {
-        this.$refs.name.validate()
-        if ( !this.$refs.name.hasError ) {
+        this.$refs.modalTaskName.$refs.name.validate()
+        if ( !this.$refs.modalTaskName.$refs.name.hasError ) {
           this.submitTask()
           this.$q.notify({
             icon: 'done',
@@ -92,7 +76,8 @@
       'modal-header': require('components/Tasks/Modals/Shared/ModalHeader.vue').default,
       'modal-task-name': require('components/Tasks/Modals/Shared/ModalTaskName.vue').default,
       'modal-due-date': require('components/Tasks/Modals/Shared/ModalDueDate.vue').default,
-      'modal-due-time': require('components/Tasks/Modals/Shared/ModalDueTime.vue').default
+      'modal-due-time': require('components/Tasks/Modals/Shared/ModalDueTime.vue').default,
+      'modal-buttons': require('components/Tasks/Modals/Shared/ModalButtons.vue').default
     }
   }
   
