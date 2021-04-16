@@ -10,38 +10,10 @@
         :autofocus="true">
         <q-card-section class="q-pt-none">
           <modal-task-name
-            :name.sync="taskToSubmit.name">
-              Task Name
-          </modal-task-name>
-
-          <div class="row q-mb-sm">
-            <q-input
-              outlined
-              v-model="taskToSubmit.dueDate"
-              label="Due date"
-              lazy-rules
-              ref="dueDate" >
-              <template v-slot:append>
-                <q-icon
-                  v-if="taskToSubmit.dueDate"
-                  name="close"
-                  @click="clearDueDate"
-                  class="cursor-pointer" />
-                <q-icon
-                  v-else
-                  name="event"
-                  class="cursor-pointer" >
-                  <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                    <q-date v-model="taskToSubmit.dueDate">
-                      <div class="row items-center justify-end">
-                        <q-btn v-close-popup label="Close" color="primary" flat />
-                      </div>
-                    </q-date>
-                  </q-popup-proxy>
-                </q-icon>
-              </template>
-            </q-input>
-          </div>
+            :name.sync="taskToSubmit.name" />
+          <modal-due-date
+            :dueDate.sync="taskToSubmit.dueDate" 
+            @clear="clearDueDate" />
 
           <div
             v-if="taskToSubmit.dueDate"
@@ -94,6 +66,7 @@
             flat />
           </div>
         </q-card-actions>
+        <pre>{{taskToSubmit}}</pre>
       </q-form>
     </q-card>
 </template>
@@ -145,7 +118,8 @@
     },
     components: {
       'modal-header': require('components/Tasks/Modals/Shared/ModalHeader.vue').default,
-      'modal-task-name': require('components/Tasks/Modals/Shared/ModalTaskName.vue').default
+      'modal-task-name': require('components/Tasks/Modals/Shared/ModalTaskName.vue').default,
+      'modal-due-date': require('components/Tasks/Modals/Shared/ModalDueDate.vue').default
     }
   }
   
