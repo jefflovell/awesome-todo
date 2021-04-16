@@ -14,37 +14,9 @@
           <modal-due-date
             :dueDate.sync="taskToSubmit.dueDate" 
             @clear="clearDueDate" />
-
-          <div
-            v-if="taskToSubmit.dueDate"
-            class="row q-mb-sm">
-            <q-input
-              outlined
-              v-model="taskToSubmit.dueTime"
-              label="Due time"
-              lazy-rules
-              ref="dueTime" >
-              <template v-slot:append>
-                <q-icon
-                  v-if="taskToSubmit.dueTime"
-                  name="close"
-                  @click="taskToSubmit.dueTime=''"
-                  class="cursor-pointer" />
-                <q-icon
-                  v-else
-                  name="access_time"
-                  class="cursor-pointer">
-                  <q-popup-proxy transition-show="scale" transition-hide="scale">
-                    <q-time v-model="taskToSubmit.dueTime">
-                      <div class="row items-center justify-end">
-                        <q-btn v-close-popup label="Close" color="primary" flat />
-                      </div>
-                    </q-time>
-                  </q-popup-proxy>
-                </q-icon>
-              </template>
-            </q-input>
-          </div>
+          <modal-due-time
+            :dueTime.sync="taskToSubmit.dueTime"
+            v-if="taskToSubmit.dueDate" />
         </q-card-section>
       
         <q-card-actions align="right">
@@ -119,7 +91,8 @@
     components: {
       'modal-header': require('components/Tasks/Modals/Shared/ModalHeader.vue').default,
       'modal-task-name': require('components/Tasks/Modals/Shared/ModalTaskName.vue').default,
-      'modal-due-date': require('components/Tasks/Modals/Shared/ModalDueDate.vue').default
+      'modal-due-date': require('components/Tasks/Modals/Shared/ModalDueDate.vue').default,
+      'modal-due-time': require('components/Tasks/Modals/Shared/ModalDueTime.vue').default
     }
   }
   
