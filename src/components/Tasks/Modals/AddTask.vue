@@ -1,15 +1,7 @@
 <template>
     <q-card>
 
-      <q-card-section class="row">
-              <div class="text-h6">Add Task</div>
-              <q-space />
-              <q-btn
-                v-close-popup
-                flat
-                round
-                icon="close" />
-      </q-card-section>
+      <modal-header>Add Task</modal-header>
 
       <q-form
         @submit="onSubmit"
@@ -17,24 +9,10 @@
         ref="newTask"
         :autofocus="true">
         <q-card-section class="q-pt-none">
-          <div class="row q-mb-sm">
-            <q-input
-              outlined
-              v-model="taskToSubmit.name"
-              label="Task name *"
-              lazy-rules
-              ref="name"
-              class="col"
-              :rules="[val => !!val || 'Please type something']" >
-                <template v-slot:append>
-                  <q-icon
-                    v-if="taskToSubmit.name"
-                    name="close"
-                    @click="taskToSubmit.name=''"
-                    class="cursor-pointer" />
-                </template>
-            </q-input>
-          </div>
+          <modal-task-name
+            :name.sync="taskToSubmit.name">
+              Task Name
+          </modal-task-name>
 
           <div class="row q-mb-sm">
             <q-input
@@ -116,7 +94,6 @@
             flat />
           </div>
         </q-card-actions>
-        
       </q-form>
     </q-card>
 </template>
@@ -165,6 +142,10 @@
         this.taskToSubmit.dueTime=''
       }
       
+    },
+    components: {
+      'modal-header': require('components/Tasks/Modals/Shared/ModalHeader.vue').default,
+      'modal-task-name': require('components/Tasks/Modals/Shared/ModalTaskName.vue').default
     }
   }
   

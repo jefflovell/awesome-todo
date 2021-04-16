@@ -11,8 +11,10 @@
     </q-header>
 
      <q-footer>
-      <q-tabs>
+      <q-tabs
+        class="row">
         <q-route-tab
+          class="col"
           v-for="nav in navs"
           :key="nav.label"
           :to="nav.to"
